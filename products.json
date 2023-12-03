@@ -1,0 +1,49 @@
+
+
+[
+    {
+        "Make": "Fender",
+        "Model": "Stratocaster",
+        "Year": "1974",
+        "Image": "./images/1974_Stratocaster.webp",
+        "Price": 1500.00,
+        "qty_available": 100,
+        "qty_sold": 0
+    },
+    {
+        "Make": "Gibson",
+        "Model": "Les Paul Standard Tobacco Burst",
+        "Year": "1977",
+        "Image": "./images/1977_LesPaul.jpeg",
+        "Price": 7889.00,
+        "qty_available": 100,
+        "qty_sold": 0
+    },
+    {
+        "Make": "RickenBacker",
+        "Model": "4001",
+        "Year": "1976",
+        "Price": 3298.44,
+        "Image": "./images/RickenBacker_1976.webp",
+        "qty_available": 100,
+        "qty_sold": 0
+    },
+    {
+        "Make": "Martin",
+        "Model": "D-28 Natural",
+        "Year": "1952",
+        "Image": "./images/1952_Martin.jpeg",
+        "Price": 24898.00,
+        "qty_available": 100,
+        "qty_sold": 0
+    },
+    {
+        "Make": "Gibson",
+        "Model": "J-160E Sunburst",
+        "Year": "1963",
+        "Image": "./images/GibsonSunburst.jpeg",
+        "Price": 14998,
+        "qty_available": 100,
+        "qty_sold": 0
+    }
+]
