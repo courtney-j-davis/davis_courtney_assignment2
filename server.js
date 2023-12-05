@@ -1,5 +1,6 @@
 //server.js
 //From Assignment One. 
+const crypto = require('crypto');
 const express = require('express');
 const app = express();
 const qs =require('querystring');
@@ -17,9 +18,9 @@ app.get('/products.js', function(request, response, next) {
 });
 app.use(express.urlencoded({ extended: true }));
 // Quantity validation function----------response.redirect(`./login.html?${params.toString()}`);
-function validateQuantity(quantity) {
+function validateQuantity(quantity, qty_available) {
     // Check if the quantity is not a number or empty
-    if (isNaN(quantity) || quantity === '') {
+    if (isNaN(quantity)) {
         return "Not a number. Please enter a non-negative quantity to order.";
     }
 
@@ -39,7 +40,7 @@ function validateQuantity(quantity) {
     }
 
     // If all checks pass, return an empty string indicating no errors
-    return '';
+    return "";
 }
 // Handling the form submissions
 app.post("/process_form", (request, response) => {
@@ -177,7 +178,7 @@ app.post('/purchase_logout', function (request, response) {
     delete temp_user['email'];
     delete temp_user['name'];
 
-    response.redirect('/products_display.html');
+   response.redirect ('/thanks.html')
 })
 //loop for handling a form submission related to the purchase order on the web app.
 //Respond to a POST method to the path /process_purchase (from products_display)
@@ -191,8 +192,6 @@ app.post("/process_purchase", function (request, response) {
     //Initialize an empty object errorObject to store error messages
     let errorObject = {};
 
-    //Create an object to store error messages
-    let qty = request.body[`quantity_textbox`];
     for (let i in products) {
         let qty = POST[`qty${[i]}`]; //moved the back ticks from 
         has_qty = has_qty || (qty > 0);
@@ -203,15 +202,44 @@ app.post("/process_purchase", function (request, response) {
         if (!Array.isArray(errorMessages)){
             errorMessages = [errorMessages];
         }
+
+        // Store the error message if there are any actual errors
+        if (errorMessages.some(msg => msg.trim() !== "")) {
+            // Only add to errorObject if there are actual error messages
+            errorObject[`qty${[i]}_error`] = errorMessages.join(', ');
+        }
+
+        /*
         //Store the error message if there are any errors
         if (errorMessages.length > 0) {
             errorObject[`qty${[i]}_error`] = errorMessages.join(', ');
         }
+        */
     }
 
+    if (Object.keys(errorObject).length === 0) {
+        if (has_qty === true) {
+            for (let i in products) {
+                temp_user[`qty${i}`] = POST[`qty${[i]}`]; //this takes qty i from temp_user and pushes it to the POST or the URL
+            }
+            //redirect to the login page in the URL. **Changed in Assignment 2 from invoice.html to login.html
+            let params = new URLSearchParams(temp_user);
+            response.redirect(`./login.html?" + ${params.toString()}`);
+        }
+        else {
+            // No quantities, redirect without appending 'inputErr'
+            response.redirect("./products_display.html?" + qs.stringify(POST));
+        }
+    }
+    else {
+        console.log(errorObject);
+        response.redirect("./products_display.html?" + qs.stringify(POST) + `&inputErr`);
+    }
+
+    /*
     //If all input boxes are empty and there are no errors
     // Append error to response URL and send back to products display page
-    if (has_qty == false && Object.keys(errorObject).length == 0) {
+    if (has_qty && Object.keys(errorObject).length == 0) {
         response.redirect("./products_display.html?" +qs.stringify(POST));
     }
     //If there is an input and there are no errors
@@ -225,8 +253,10 @@ app.post("/process_purchase", function (request, response) {
     }
     //If there are errors, redirect user back to products page with error information
     else if (Object.keys(errorObject).length > 0) {
+        console.log(errorObject);
         response.redirect("./products_display.html?" + qs.stringify(POST) + `&inputErr`);
     }
+    */
 });
 
 
@@ -235,10 +265,11 @@ app.post('/process_login', function (request, response) {
     let POST = request.body;
     let entered_email = POST['email'].toLowerCase();
     let entered_password = POST['password'];
+    
 //this means the text boxes are blank/
     if (entered_email.length === 0 && entered_password.length === 0) {
         request.query.loginErr = 'Email address & password are both required.';
-    } else if (user_data[entered_email]) {
+    }   else if (user_data[entered_email]) {
         if (user_data[entered_email].password === entered_password) {
             temp_user['email'] = entered_email;
             temp_user['name'] = user_data[entered_email].name;
@@ -258,45 +289,62 @@ app.post('/process_login', function (request, response) {
     }
 
     request.query.email = entered_email;
+    //this puts the enetered email into the URL(params)
     let params = new URLSearchParams(request.query);
     response.redirect(`login.html?${params.toString()}`);
 })
 
-let registration_errors = {};
 
+ const registration_errors = [];
 app.post('/process_register', function (request, response) {
     //get user input
-    let reg_name =request.body.name;
+    
+    let reg_name =request.body['name'];
     let reg_email = request.body.email.toLowerCase();
     let reg_password = request.body.password;
     let reg_confirm_password = request.body.confirm_password 
 
-    //email validation
-    //------------NAME VALIDATION---------------//
-    function validateName(name) {
-        // Regular expression to match only letters
-        let letterRegex = /^[A-Za-z]+$/;
-      
-        // Check if the name contains only letters
-        if (letterRegex.test(name)) {
-          return true; // Name is valid
-        } else {
-          return false; // Name contains numbers or other characters
-        }
-      }
-      
-      // Example usage:
-      let userName = "JohnDoe";
-      if (validateName(userName)) {
-        console.log("Name is valid.");
-      } else {
-        console.log("Name is not valid. Please use only letters.");
-      }}
-    //password validation
+   
+    //-----------EMAIL VALIDATION----------------//
+    //--<-- the email exists---------------//
+    const existingEmail = Object.keys(reg_email).find(
+        (email) => email.toLowerCase() === request.body.email.toLowerCase()
+      );
     
+    if (existingEmail) {
+      registration_errors.push (`Email Address,${reg_email} Already Exists! `);
+    }
+    //----<-- email formatting requirements------//
+    let emailRegx =  /^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    if (!emailRegx.test(reg_email))  {registration_errors.push("Invalid email format"); 
+    }
+    //------------NAME VALIDATION---------------//
+    let nameRegex = /^[a-zA-Z]{30}$/;
+if (!nameRegex.test(reg_name)) {
+    registration_errors.push("Name should only contain letters");
+    }
+    //----------password validation--------------//
+    function validateConfirmPassword(reg_confirm_password, reg_password) {
+        // delete previous errors. 
+        delete registration_errors['confirm_password_type'];
+        
+        console.log(registration_errors);
+    
+        // Check if the password and repeat password match
+        if (reg_password !== reg_confirm_password) {
+          registration_errors['confirm_password_type']= 'Password and Repeat Password do not match.'
+        }
+      
+       
+      }
+      function hashPassword (password) {
+        let hash = crypto.createHash ('sha256');
+        hash.update(password);
+        return hash.digest('hex');
+      }
     
     //make sure passwords match
-    validateConfirmPassword (reg_confirm_password, reg_password),
+    validateConfirmPassword(reg_confirm_password, reg_password)
 
     //server response..checking if there are no errors. 
     if (Object.keys(registration_errors).length ==0) {
@@ -308,20 +356,19 @@ app.post('/process_register', function (request, response) {
      // Asynchronosuly write the updated user_data and products to their respective files
      fs.writeFile(__dirname + '/user_data.json', JSON.stringify(user_data), 'utf-8', (err)=> {
         if (err) {
-            console.error('Error updating usere data:', err);
+            console.error('Error updating user data:', err);
             //consider editing this for my personal preference to where I want to send an error response. 
 
         } else {
             console.log('User data has been updated!')
-        //add the user's info into temp_infor
+        //add the user's info into temp_user
             temp_user['name']= reg_name;
             temp_user['email']= reg_email;
-
-        console.log(temp_user);
-        console.log(user_data);
+            console.log(temp_user);
+            console.log(user_data);
         
         let params = new URLSearchParams(temp_user);
-        response.redirect(`/invoice.html?regSuccess&vallid&${params.toString()}`);
+        response.redirect(`/invoice.html?regSuccess&valid&${params.toString()}`);
         } 
         })
     } else //there are errors from validation and stored in registration_errors
@@ -330,25 +377,27 @@ app.post('/process_register', function (request, response) {
         delete request.body.confirm_password;
 
         let params = new URLSearchParams(request.body);
-        response.redirect(`/register.html?${params.toString()& $(qs.stringify(regitration_errors))}`);
-    }
-    
-  
-  
-
-  function validateConfirmPassword(reg_confirm_password, reg_password) {
-    // delete previous errors. 
-    delete registration_errors['confirm_password_type'];
-    
-    console.log(registration_errors);
-
-    // Check if the password and repeat password match
-    if (reg_password !== reg_confirm_password) {
-      registration_errors['confirm_password_type']= 'Password and Repeat Password do not match.'
+        response.redirect(`/register.html?${params.toString() & $(qs.stringify(registration_errors))}`);
     }
   
-   
-  }})
+});  
 
    // If the passwords match, you can proceed with form submission or other actions
+
    //document.getElementById('register-form').submit();
+   //update the total sold and quantity avalible 
+app.post("/complete_purchase", function (request, response) {
+    let orderParams = request.body['order'];
+    let orderArray = JSON.parse(orderParams);
+    let username = request.body['name'];
+    for (i in orderArray)
+        {
+            //update total and qty only if everything is good
+            products[i]['total_sold'] += orderArray[i];
+            products[i]['qty_available'] -= orderArray[i];
+        }
+        //log out user
+        loginUsers.pop(reg_name);
+        console.log(loginUsers);
+    response.redirect('/products_display.html?&thankYou=true');
+});
