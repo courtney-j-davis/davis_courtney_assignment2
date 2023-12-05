@@ -1,0 +1,77 @@
+<!--same header as products.html-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank you for ordering!</title>
+
+    <!--USING BOOTSTRAP 4 -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel = "stylesheet" href ="style.css">
+
+    <!--send get request to server for ./products.js-->
+    <script src="./products.js"></script>
+</head>
+<body>
+    <h1>BR Fret Shop || Invoice</h1>
+    <br><br>
+    <h5 id="helloMsg" style="color: orange;"></h5>
+    <br>
+   
+<body>
+    
+    
+ 
+
+    <div class="container">
+        <br>
+        <br>
+
+        <!-- INVOICE TABLE -->
+        <table class="table">
+            <thead style="background-color: #de7b11; color: #f7fcff; font-weight: bolder;">
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Make</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Remaining Inventory</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Extende Price</th>
+                </tr>
+            </thead>
+            <tbody id="invoice_table"></tbody>
+            <tbody id="total_display"></tbody>
+        </table>
+        <!--This is a form to contain 2 buttons, one to logout, one to continue shopping.-->
+        <div class = "buttons-container">
+            <form name = "invoice" method = "POST">
+              <div class="button-wrapper">
+              <input class = "sm-button-highlight" type = "submit" value = "Continue Shopping" name = "continue" onclick = "invoice.action='/continue_shopping'" style = "width: 40%">
+              
+              </div>
+          
+              <div class="button-wrapper2">
+                    <input class = "sm-button-highlight" type = "submit" value = "Complete Purchase" name = "logout" onclick = "invoice.action='/purchase_logout'" style = "width: 40%">
+                     <div class="popup" onclick="completePurchase()">Complete Purchase
+                    <span class="popuptext" id="myPopup">Thank you for shopping with us!</span>
+              </div>
+              </div>
+            </form>
+          </div>
+          
+
+    
+</body>
+    <script src="./invoice.js"></script>
+</html>

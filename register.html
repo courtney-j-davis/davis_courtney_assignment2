@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <div id="sticky-navbar">
+      <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+          <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                  <img src= "/images/BR Fret Shop Logo 1 copy.jpeg " alt="" width="100" height="80">
+                </a>
+                </div></nav></div>
+</head>
+<body>
+    <!-- Create a form like login html but is going to have more boxes.Form the goes to /process_register method Post, name register form
+    Under each span for elements there is an error message span-->
+
+<!--Password Validation Form-->
+<div class="container">
+    <!--form action needs revision-->
+    <form  name="register-form" action="/process_register" method="POST">
+      <label for="name">Name</label>
+      <i class="fa fa-user icon"></i>
+      <input type="text" placeholder= "Letters only" id="usrname" name="usrname" required>
+ <!--probaly should put an error message in here. This is Sal's: <tr class="error_tr"> <td colspan="3" id= "name_error" style+"color: red;"></td>-->
+     
+      <label for="email"><b>Email</b></label>
+      <input type="text" placeholder="Enter Email" name="email" id="email" required>
+
+<!--probaly should put an error message in here. This is Sal's: <tr class="error_tr"> <td colspan="3" id= "email_error" style+"color: red;"></td>-->
+ 
+      <label for="psw">Password</label>
+      <input type="password" placeholder="Enter Password" id="psw" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 12 or more characters" required>
+        <div id="message" style="display: none;">
+         <h3>Password must contain the following:</h3>
+         <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+         <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+         <p id="number" class="invalid">A <b>number</b></p>
+         <p id="length" class="invalid">Minimum <b>12 characters</b></p>
+        </div>
+      <label for="psw-repeat"><b>Repeat Password</b></label>
+      <input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password" required>
+
+      <button type="submit" onclick="validatePassword()" value="Submit" class="sm-button"></button>
+    </form>
+  </div>
+  
+  
+
+<!-- Add button to login page -->
+<a href="/login.html">Already have an account? Login here </a>
+<br><br>
+</div>
+</div>
+<!-- Back to Product Display Page -->
+<a href="/products_display.html">Back to Product Display Page</a>
+
+
+
+
+
+
+
+
+
+
+</body>
+<script src="/register.js"></script>
+</html>

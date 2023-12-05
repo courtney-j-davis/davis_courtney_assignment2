@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<head>
+    <title>Hardwood Guitars Hawaii</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <html lang="en">
+
+    <!-- Used Bootstrap to create responsive site -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Link to products_style.css -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Meta tags, title, and other imports... -->
+    <!--<script type="text/javascript" src="/products_display.js"></script> --->
+    <script src="/products.js"></script>
+
+    <!-- Importing Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<!--Cart Icon-->
+<!--<div id="cart-icon" class="cart-icon">
+    <img src="/images/shopping-cart_4360667.png" alt="">
+    <span id="cart-quantity">0</span>
+</div>-->
+
+
+  
+<!-- add personalization to this page if a logged in user pushes continue shopping button on invoice page-->
+<header>Hardwood Guitars</header>
+   <br>
+   <a class="navbar-brand" href="#">
+    <img src= "/images/BR Fret Shop Logo 1 copy.jpeg " class="logo" alt="" width="100" height="80">
+  </a> 
+   
+   
+</header>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <!--<a class="navbar-brand" href="#">Hardwood Guitars</a>-->
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/index.html">Home</a><br><br>
+      <a href="/products_display.html">Guitars</a></li>
+      <!--<li><a href="#">Electric Guitars:coming soon</a></li>
+      <li><a href="#">Acoustic Guitars: coming soon</a></li>-->
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="/register.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="/public/login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+    
+  </div>
+</nav> 
+
+
+
+
+
+
+
+
+
+
+
+<!--Add a Navigation Bar so customers can toggle between the index.html and products_display.htm
+ <div id="sticky-navbar">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="./index.html">Home</a>
+              <br>
+              <br>
+            </li>
+            <br>
+            <br>
+            <li class="nav-item">
+              <a class="nav-link" href="./products_display.html">Products</a>
+              <h5 id="helloMsg" style="color: orange;"></h5>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+</div>-->
+
+  <div class="container">
+        <br>
+        <br>
+        <h3 id="errMsg" style="color: darkorange;"></h3>
+        <br>
+        <!--Product Cards-->
+            <!--the action "process_purchase" has been defined on the server side with a POST route handler. This will send to the server-->
+        <form  id="productForm"  action= "/process_purchase" method="POST" name="qty_form" class="qty_form" onsubmit="showAlert()">
+            
+          <!--this div class= "row" (inner.HTML function) will dynamically populate the website -->
+            <div class="row"></div>
+            <input type="submit" value="Purchase" class="sm-button highlight">
+        </form>
+    </div>
+       
+</body> 
+<!--this is a GET for server side validation that is housed in the public folder for use on the client side-->       
+<script src="./products_display.js"></script>
+   
+</html>
+
+    
+    
+
+
+    
+    
+
+
+
+
